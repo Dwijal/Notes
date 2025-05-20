@@ -9,25 +9,6 @@ The Azure Key Vault Provider for Secrets Store CSI Driver allows for the integra
 The Pod will be able to retrieve the secret from the Secret Store CSI volume, which a secure volume.
 That volume is mounted to the pod and only that pod can access that volume.
 
-Secret Store CSI driver uses 5 options to connect to keyvault:
-1. Service Principal (SPN)
-2. System Managed Identity attached to the VMSS (Nodepool)
-3. User Managed Identity attached to the VMSS (Nodepool)
-4. User Managed Identity attached to the VMSS (Nodepool) with Pod Identity
-5. Workload Identity with Service Account
-
-In this lab, we'll do the following:
-
-1. Create an AKS cluster with Secret Store CSI driiver and Workload Identity
-2. Verify connection to the cluster
-3. Create Keyvault resource with RBAC mode and assign RBAC role for admin
-4. Create keyvault secret
-5. Create user managed identity resource
-6. Assign RBAC role to user managed identity for Keyvault's secret
-7. Create service account for user managed identity
-8. Configure identity federation
-9. Configure secret provider class to get secret from Keyvault and to use user managed identity
-10. Test access to Secret in keyvault with sample deployment
 
 ![](images/40_secret_store_csi_keyvault__secret-store-csi-wi-architecture.png)
 
