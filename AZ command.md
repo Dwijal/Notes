@@ -1,4 +1,4 @@
-
+![image](https://github.com/user-attachments/assets/960f315a-b68f-42e7-b64c-a04c099536fa)
 ### 📘 Azure Custom Role with Full Schema and CLI Commands
 
 ---
@@ -79,6 +79,18 @@ az role assignment create   --assignee-object-id <managed-identity-object-id>   
 
 ```
 az account show --query user.name -o tsv
+
+```
+
+```
+az  aks create -g <> -n  <> --network-plugin  
+
+```
+
+```
+az aks show -n aks-cluster -g <> --query fqdn
+
+az aks show -n aks-cluster -g <> --query privateFqdn![image](https://github.com/user-attachments/assets/7b4da735-3461-4550-bf0c-a85c271d481f)
 
 ```
 
