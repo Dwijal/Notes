@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/960f315a-b68f-42e7-b64c-a04c099536fa)
+
 ### 📘 Azure Custom Role with Full Schema and CLI Commands
 
 ---
