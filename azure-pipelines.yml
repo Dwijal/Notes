@@ -1,5 +1,9 @@
 trigger: none
 
+pool:
+  name: 'DwiPool'
+  demands:
+    - agent.name -equals dwivm2
 
 parameters:
 - name: Environment
@@ -10,3 +14,7 @@ parameters:
   - T
   - O
   - I
+  
+steps:
+  - script: |
+      echo "This is the first step"
