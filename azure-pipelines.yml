@@ -1,9 +1,7 @@
-trigger: none
+### TMS-IAC-Release
+name: $(Build.BuildId)
 
-pool:
-  name: 'DwiPool'
-  demands:
-    - agent.name -equals dwivm2
+trigger: none
 
 parameters:
 - name: Environment
@@ -14,7 +12,189 @@ parameters:
   - T
   - O
   - I
-  
+
+- name: Region
+  type: string
+  default: weu
+  values:
+  - bzn
+  - cnc
+  - cin
+  - cus
+  - eaa
+  - eus
+  - eu2
+  - frc
+  - gwc
+  - jpe
+  - krc
+  - ncu
+  - neu
+  - qac
+  - scu
+  - sea
+  - sin
+  - swc
+  - szn
+  - uan
+  - uks
+  - wcu
+  - weu
+  - win
+  - wu2
+  - wu3  
+
+- name: Subscription
+  type: string
+  default: 'Azure RM - Playground (Ops)'
+  values:
+  - Azure RM - Playground (Ops)
+  - Azure RM - QA (Ops)
+
+- name: initialIac
+  displayName: 'Initial IaC Deploy?'
+  type: boolean
+  default: false
+
+- name: applyTfPlan
+  displayName: 'Apply TF Plan?'
+  type: boolean
+  default: false
+
+- name: targetModules
+  displayName: |
+    Modules to perform the run for? 
+    Setting the value to [] will trigger full run (all modules). 
+    Modules are selectable by string array e.g. [module.networking, module.storage]
+  type: object
+  # module.aci is disabled due to PAT issues on agent pools
+  default: [
+    module.resource_group,
+    module.monitoring,
+    module.networking,
+    module.key_vault,
+    module.key_vault_data,
+    module.storage,
+    module.aks_cluster,
+    module.api_management,
+    module.application_gateway
+  ]
+
+- name: configureCluster
+  displayName: 'Configure Cluster?'
+  type: boolean
+  default: false
+
+- name: regionObject
+  displayName: 'Region Map'
+  type: object
+  default:
+  - bzn: 'brazilsouth'
+  - cnc: 'canadacentral'
+  - cin: 'centralindia'
+  - cus: 'centralus'
+  - eaa: 'eastasia'
+  - eus: 'eastus'
+  - eu2: 'eastus2'
+  - frc: 'francecentral'
+  - gwc: 'germanywestcentral'
+  - jpe: 'japaneast'
+  - krc: 'koreacentral'
+  - ncu: 'northcentralus'
+  - neu: 'northeurope'
+  - qac: 'qatarcentral'
+  - scu: 'southcentralus'
+  - sea: 'southeastasia'
+  - sin: 'southindia'
+  - swc: 'swedencentral'
+  - szn: 'switzerlandnorth'
+  - uan: 'uaenorth'
+  - uks: 'uksouth'
+  - wcu: 'westcentralus'
+  - weu: 'westeurope'
+  - win: 'westindia'
+  - wu2: 'westus2'
+  - wu3: 'westus3'
+
+- name: deployCoreServices
+  displayName: 'Deploy Core Services?'
+  type: boolean
+  default: false
+
+- name: coreServicesSubscription
+  displayName: 'Subscription for Core Services'
+  type: string
+  default: 'Azure RM - QA (Ops)'
+  values:
+  - Azure RM - QA (Ops)
+
+- name: resourceGroupCS
+  displayName: 'Core Services Resource Group (tfstate)'
+  type: string
+  default: 'RG-TMS-IAC-WEU-T'
+
+- name: storageAccountCS
+  displayName: 'Core Services Storage Account (tfstate)'
+  type: string
+  default: 'tmsiacstweut'
+
+- name: storageAccountContainerCS
+  displayName: 'Core Services Storage Account Container (tfstate)'
+  type: string
+  default: 'terraformstate'
+
+- name: tfstateCS
+  displayName: 'Tfstate Key'
+  type: string
+  default: 'terraform-iac-tms-core-services.tfstate'
+
+variables:
+## Variable group from pipelines library
+# - group: TMS-Shared
+### Nigthly vars
+- name: environment
+  ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+    value: 'T'
+  ${{ else }}:
+    value: '${{ parameters.Environment }}' 
+- name: region
+  ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+    value: 'weu'
+  ${{ else }}:
+    value: '${{ parameters.Region }}'
+- name: subscription
+  ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+    value: 'Azure RM - QA (Ops)'
+  ${{ else }}:
+    value: '${{ parameters.Subscription }}'
+- name: applyTfPlan
+  ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+    value: true
+  ${{ else }}:
+    value: '${{ parameters.applyTfPlan }}'
+- name: tfTarget
+  ${{ if eq(join('', parameters.targetModules), '') }}:
+    value: ""
+  ${{ else }}:
+    value: "-target=${{ join(' -target=', parameters.targetModules) }}"
+- name: configureCluster
+  ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+    value: true
+  ${{ else }}:
+    value: '${{ parameters.configureCluster }}'     
+### Template vars    
+# - template: templates/vars/cd-release-vars.yml
+#   parameters: 
+#     environment: ${{ variables.environment }}
+#     region: ${{ variables.region }}
+### Job name vars
+- name: deploymentId
+  ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+    value: ${{ replace(variables['serviceName'], '-', '_') }}__${{ replace(variables['Build.SourceBranchName'], '.', '_') }}
+  ${{ else }}:
+    value: ${{ replace(variables['serviceName'], '-', '_') }}__${{ replace(replace(variables['Build.SourceBranchName'], '.', '_'), '-', '_') }}
+
+
 steps:
   - script: |
-      echo "This is the first step"
+      echo "This is first step"
