@@ -1,0 +1,12 @@
+trigger: none
+
+
+parameters:
+- name: Environment
+  type: string
+  default: D
+  values:
+  - D
+  - T
+  - O
+  - I
