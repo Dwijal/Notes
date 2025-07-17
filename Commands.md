@@ -2,15 +2,19 @@ df -h
 
 To check the pod  disk space/file system use the below command
 
+```yaml
 grep -v rootfs  /proc/mounts >  /etc/mtab
-
+```
 
 *** To copy the file from pod to local
+```yaml
 kubectl  cp  <pod-name>:/<pod-data-file-path> /<local-file-path>
+```
 
 *** To copy the files from local to pod/container
+```yaml
 kubectl cp  <filename/directoryname> <pod-name>:/pvc-webapp
-
+```
 
 #### Container logs
 
@@ -23,14 +27,10 @@ df -h /var/lib/kubelet
 du -sh /var/log/pods
 kubectl describe pod <pod-name> | grep -A10 "Ephemeral Storage"
 
-cat /proc/sys/kernel/pid_max           # Max allowed PIDs
-ps -e | wc -l                           # PIDs currently in use
 
-Check zombie Process 
-ps -e -o stat,pid,ppid,cmd | grep '^Z'
 
 ----------------------------------------------------------------------------------
-
+```yaml
 # Check pod status
 kubectl get pod -n calico-system -o wide
 
@@ -48,3 +48,4 @@ kubectl describe pod calico-node-<name> -n calico-system
 
 # Check node system logs (e.g. for containerd, network)
 journalctl -u kubelet
+```
