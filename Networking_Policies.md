@@ -1,7 +1,7 @@
 
 
 ### If we just write the policyType then both ingress and egress traffic is blocked. 
-```
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -18,7 +18,7 @@ spec:
 
 ### Below policy convey we have defined the ingress rule but not defined the egress so it allows the egress traffic as well.
 
-```
+```yaml
 # Backend policy - allow ingress only from frontend pods
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -38,12 +38,12 @@ spec:
 ```
 
 ### No podSelector = select all pods in namespace
-```
+```yaml
 podSelector: {}
 ```
 
 ### Now no pod can accept ingress and egress unless allowed explicitly.
-```
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -57,7 +57,7 @@ spec:
 ```
 
 ### Commonly, allow pods to connect to cluster DNS:
-```
+```yaml
 egress:
 - to:
   - namespaceSelector:
@@ -73,7 +73,7 @@ egress:
 
 ### Complete NetworkPolicy Example
 
-```
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
