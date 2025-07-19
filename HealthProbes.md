@@ -98,3 +98,26 @@ spec:
 
 ✅ **Tip**: `startupProbe` disables `liveness` and `readiness` checks until it succeeds. Once successful, `liveness` and `readiness` begin checking.
 
+
+```
+Behavior of RP, LP, and Startup Probes with Multi-Container Pods
+A pod in Kubernetes can host multiple containers.
+The pod's status reflects the worst state of any container within it
+
+- Startup Probe:
+
+Each container's startup probe runs independently.
+If the startup probe for one container fails, only that container is affected, and liveness/readiness probes are not triggered for it. Other containers proceed unaffected.
+
+- Readiness Probe:
+
+Readiness probes determine whether the pod is ready to serve traffic.
+If the readiness probe fails for one container, the entire pod is marked "Not Ready" to ensure no partial or unreliable service is provided.
+
+- Liveness Probe:
+
+Liveness probes are container-specific.
+If the liveness probe fails for one container, only that container is restarted by the Kubelet, while other containers remain unaffected.
+```
+
+
