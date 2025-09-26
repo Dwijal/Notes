@@ -1,5 +1,9 @@
 
 ## 📦 Kubernetes Environment Variables and Downward API from secrets , configmap and volume Mounts.
+
+Env variables → restart needed for the pod.
+
+Mounted volumes → file updates automatically, but app must handle reload.
 ---
 
 ## 1. Static Environment Variable
